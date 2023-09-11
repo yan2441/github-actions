@@ -26,3 +26,21 @@ jobs:
       uses: TriPSs/conventional-changelog-action@v3
       with:
         preset: angular
+
+    - name: Bump Version
+      id: bump-version
+      run: |
+        # Generate a new version
+        echo "::set-output name=version::$(jq -r '.version' package.json)"
+        
+    - name: Commit and push changes
+      run: |
+        git config user.email "github-actions@github.com"
+        git config user.name "GitHub Actions"
+        git add package.json
+        git commit -m "Bump version to ${{ steps.bump-version.outputs.version }}"
+        git tag -a v${{ steps.bump-version.outputs.version }} -m "Version ${{ steps.bump-version.outputs.version }}"
+        git remote add origin-second https://${{ secrets.TOKEN_ACTION }}@github.com/$GITHUB_REPOSITORY
+        git push origin-second v${{ steps.bump-version.outputs.version }}
+        git push origin-second
+        
