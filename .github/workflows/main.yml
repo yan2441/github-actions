@@ -35,4 +35,5 @@ jobs:
         git config user.name "GitHub Actions"
         git add package.json
         git commit -m "Bump version to ${{ steps.generate-changelog.outputs.version }}"
-        git push
+        git remote add origin_with_token https://$GITHUB_ACTOR:${{ secrets.TOKEN_ACTION }}@github.com/$GITHUB_REPOSITORY
+        git push origin_with_token main
