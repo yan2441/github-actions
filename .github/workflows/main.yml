@@ -1,24 +1,38 @@
-name: Bump version
+name: Update Version
+
 on:
   push:
     branches:
       - main
-    paths-ignore:
-      - 'package.json'
-      - 'CHANGELOG.md'
+
 jobs:
-  build:
+  update-version:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js
+      uses: actions/setup-node@v2
       with:
-        token: ${{ secrets.TOKEN_ACTION }}
-    - name: Conventional Changelog Action
-      uses: TriPSs/conventional-changelog-action@v4.0.0
+        node-version: 14  # Use the Node.js version you need
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Generate Changelog
+      uses: conventional-changelog/action@v3
       with:
-        github-token: ${{ secrets.TOKEN_ACTION }}
-        git-message: 'chore(release): {version}'
-        preset: 'angular'
-        tag-prefix: ''
-        output-file: 'CHANGELOG.md'
+        preset: angular
+
+    - name: Bump Version
+      run: npm version --no-git-tag-version ${{ steps.generate-changelog.outputs.version }}
+
+    - name: Commit and push changes
+      run: |
+        git config user.email "github-actions@github.com"
+        git config user.name "GitHub Actions"
+        git add package.json
+        git commit -m "Bump version to ${{ steps.generate-changelog.outputs.version }}"
+        git push
