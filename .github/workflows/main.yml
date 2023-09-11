@@ -5,6 +5,7 @@ on:
     branches:
       - main
 
+
 jobs:
   update-version:
     runs-on: ubuntu-latest
