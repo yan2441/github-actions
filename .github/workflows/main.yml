@@ -13,11 +13,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN_ACTION }}
+        token: ${{ secrets.TOKEN_ACTION }}
     - name: Bump version and push tag
       uses: TriPSs/conventional-changelog-action@master
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN_ACTION }}
+        github-token: ${{ secrets.TOKEN_ACTION }}
         git-message: 'chore(release): {version}'
         preset: 'v'
         tag-prefix: ''
