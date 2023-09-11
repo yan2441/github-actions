@@ -36,6 +36,5 @@ jobs:
         git config user.name "GitHub Actions"
         git add package.json
         git commit -m "Bump version to ${{ steps.generate-changelog.outputs.version }}"
-        git remote remove origin
-        git remote add origin https://${{ secrets.TOKEN_ACTION }}@github.com/$GITHUB_REPOSITORY
-        git push 
+        git remote add origin-second https://${{ secrets.TOKEN_ACTION }}@github.com/$GITHUB_REPOSITORY
+        git push origin-second
