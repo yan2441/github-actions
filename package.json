@@ -1,6 +1,6 @@
 {
   "name": "github-actions",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "GitHub Actions for Node.js",
   "packageManager": "yarn@3.6.3"
 }
