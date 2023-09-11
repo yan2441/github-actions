@@ -21,8 +21,8 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Generate Changelog
-      uses: conventional-changelog/action@v3
+    - name: Conventional Changelog Action
+      uses: TriPSs/conventional-changelog-action@v4.0.0
       with:
         preset: angular
 
