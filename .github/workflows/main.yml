@@ -31,7 +31,8 @@ jobs:
       id: bump-version
       run: |
         # Generate a new version
-        echo "version=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+        # echo "version=$(jq -r '.version' package.json)" >> $GITHUB_ENV
+        
         
     - name: Commit and push changes
       run: |
@@ -39,9 +40,9 @@ jobs:
         git config user.name "GitHub Actions"
         git add package.json
         git commit -m "Bump version to ${{ steps.bump-version.outputs.version }}"
-        git tag -a v${{ steps.bump-version.outputs.version }} -m "Version ${{ steps.bump-version.outputs.version }}"
+        git tag -a v${{ steps.bump-version.version }} -m "Version ${{ steps.bump-version.version }}"
         git remote add origin-second https://${{ secrets.TOKEN_ACTION }}@github.com/$GITHUB_REPOSITORY
-        git push origin-second v${{ steps.bump-version.outputs.version }}
+        git push origin-second v${{ steps.bump-version.version }}
         git push origin-second
         
     - name: Get the last tag
@@ -49,13 +50,13 @@ jobs:
       run: |
         git fetch --tags
         last_tag=$(git describe --tags --abbrev=0)
-        echo "name=tag" >> "$last_tag"
+        echo "tag=$last_tag" >> $GITHUB_ENV
           
     - name: Create Release
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
-        name: Release ${{ steps.last_tag.outputs.tag }}
-        tag_name: ${{ steps.last_tag.outputs.tag }}
+        name: Release ${{ steps.last_tag.tag }}
+        tag_name: ${{ steps.last_tag.tag }}
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN_ACTION }}
