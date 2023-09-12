@@ -43,22 +43,18 @@ jobs:
         git remote add origin-second https://${{ secrets.TOKEN_ACTION }}@github.com/$GITHUB_REPOSITORY
         git push origin-second v${{ steps.bump-version.outputs.version }}
         git push origin-second
-
-  create-release:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Create Release
-      id: create_release
+        
+    - name: Create GitHub Release
+      id: create-release
       uses: softprops/action-gh-release@v1
       with:
-        files: README.md  # Specify the files you want to include in the release
+        files: package.json  # Specify the files you want to include in the release
         token: ${{ secrets.TOKEN_ACTION }}
+        title: Release ${{ steps.get-version.outputs.version }}
+        body: |
+          Release ${{ steps.get-version.outputs.version }}
 
     - name: Get Release URL
-      id: get_release_url
-      run: echo "::set-output name=release_url::$(jq -r '.html_url' ${{ steps.create_release.outputs.release_asset }})"
-       
-        
-
-        
+      id: get-release-url
+      run: echo "::set-output name=release_url::$(jq -r '.html_url' ${{ steps.create-release.outputs.release_asset }})"
+ 
