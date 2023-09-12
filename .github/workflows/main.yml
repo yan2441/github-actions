@@ -12,12 +12,12 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
 
     - name: Use Node.js
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
-        node-version: 14  # Use the Node.js version you need
+        node-version: 16  # Use the Node.js version you need
 
     - name: Install dependencies
       run: npm install
@@ -31,7 +31,7 @@ jobs:
       id: bump-version
       run: |
         # Generate a new version
-        echo "::set-output name=version::$(jq -r '.version' package.json)"
+        echo "{name}={version}" >> $(jq -r '.version' package.json)
         
     - name: Commit and push changes
       run: |
@@ -49,7 +49,7 @@ jobs:
       run: |
         git fetch --tags
         last_tag=$(git describe --tags --abbrev=0)
-        echo "::set-output name=tag::$last_tag"
+        echo "{name}={tag}" >> $last_tag
           
     - name: Create Release
       id: create_release
