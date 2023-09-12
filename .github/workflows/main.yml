@@ -31,7 +31,7 @@ jobs:
       id: bump-version
       run: |
         # Generate a new version
-        echo "name=version >> $(jq -r '.version' package.json)"
+        echo "name=version" >> "$(jq -r '.version' package.json)"
         
     - name: Commit and push changes
       run: |
@@ -49,7 +49,7 @@ jobs:
       run: |
         git fetch --tags
         last_tag=$(git describe --tags --abbrev=0)
-        echo "name=tag >> $last_tag"
+        echo "name=tag" >> "$last_tag"
           
     - name: Create Release
       id: create_release
