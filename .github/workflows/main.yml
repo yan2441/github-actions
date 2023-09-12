@@ -39,10 +39,10 @@ jobs:
         git config user.email "github-actions@github.com"
         git config user.name "GitHub Actions"
         git add package.json
-        git commit -m "Bump version to ${{ steps.bump-version.outputs.version }}"
-        git tag -a v${{ steps.bump-version.version }} -m "Version ${{ steps.bump-version.version }}"
+        git commit -m "Bump version to ${{ env.outputs.version }}"
+        git tag -a v${{ env.version }} -m "Version ${{ env.version }}"
         git remote add origin-second https://${{ secrets.TOKEN_ACTION }}@github.com/$GITHUB_REPOSITORY
-        git push origin-second v${{ steps.bump-version.version }}
+        git push origin-second v${{ env.version }}
         git push origin-second
         
     - name: Get the last tag
@@ -56,7 +56,7 @@ jobs:
       id: create_release
       uses: softprops/action-gh-release@v1
       with:
-        name: Release ${{ steps.last_tag.tag }}
-        tag_name: ${{ steps.last_tag.tag }}
+        name: Release ${{ env.tag }}
+        tag_name: ${{ env.tag }}
       env:
         GITHUB_TOKEN: ${{ secrets.TOKEN_ACTION }}
