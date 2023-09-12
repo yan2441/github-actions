@@ -31,7 +31,8 @@ jobs:
       id: bump-version
       run: |
         # Generate a new version
-        echo "{name}={version}" >> $(jq -r '.version' package.json)
+        version_tag=$(jq -r '.version' package.json)
+        echo "{name}={version}" >> $version_tag
         
     - name: Commit and push changes
       run: |
