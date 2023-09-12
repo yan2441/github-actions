@@ -44,17 +44,18 @@ jobs:
         git push origin-second v${{ steps.bump-version.outputs.version }}
         git push origin-second
         
-    - name: Create GitHub Release
-      id: create-release
+    - name: Get the last tag
+      id: last_tag
+      run: |
+        git fetch --tags
+        last_tag=$(git describe --tags --abbrev=0)
+        echo "::set-output name=tag::$last_tag"
+          
+    - name: Create Release
+      id: create_release
       uses: softprops/action-gh-release@v1
       with:
-        files: package.json  # Specify the files you want to include in the release
-        token: ${{ secrets.TOKEN_ACTION }}
-        title: Release ${{ steps.get-version.outputs.version }}
-        body: |
-          Release ${{ steps.get-version.outputs.version }}
-
-    - name: Get Release URL
-      id: get-release-url
-      run: echo "::set-output name=release_url::$(jq -r '.html_url' ${{ steps.create-release.outputs.release_asset }})"
- 
+        tag_name: ${{ steps.last_tag.outputs.tag }}
+        title: Release ${{ steps.last_tag.outputs.tag }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN_ACTION }}
